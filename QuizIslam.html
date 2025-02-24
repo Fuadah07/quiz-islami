@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizz Islam</title>
+    <style>
+        /* Background and general layout */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #f6d365, #fda085);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Main container styling for the main page */
+        .main-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Heading and welcome text */
+        .title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            animation: slideIn 1s ease-out;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 40px;
+            font-style: italic;
+            animation: fadeIn 2s ease-out;
+        }
+
+        /* Button styling */
+        #start-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 40px;
+            font-size: 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            border: none;
+        }
+
+        #start-btn:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+        }
+
+        #start-btn:active {
+            transform: scale(1.05);
+        }
+
+        /* Animation Effects */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+
+        /* Icon styles */
+        .icon {
+            width: 80px;
+            margin-bottom: 30px;
+            animation: rotateIcon 3s ease-in-out infinite;
+        }
+
+        @keyframes rotateIcon {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* Styling for the game container */
+        .game-container {
+            background-color: #d3d3d3;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+            width: 500px;
+        }
+        .title {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        .question {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        .option {
+            background-color: #8e44ad;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 8px 0;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .option:hover {
+            background-color: #6c3483;
+        }
+        .feedback {
+            font-size: 20px;
+            margin-top: 15px;
+        }
+        #start-btn-quiz {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            font-size: 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #start-btn-quiz:hover {
+            background-color: #45a049;
+        }
+
+        /* End screen styles */
+        #end-screen {
+            text-align: center;
+            margin-top: 20px;
+        }
+        #end-screen .title {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        #end-screen .feedback {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #retry-btn, #home-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px;
+        }
+        #retry-btn:hover, #home-btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main page with quiz start button -->
+    <div class="main-container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Moon_and_Star.svg/1024px-Moon_and_Star.svg.png" alt="Islamic Icon" class="icon">
+        <div class="title">Selamat datang di Quizz Islam</div>
+        <div class="subtitle">Uji pengetahuan Anda tentang Islam dalam kuis seru ini!</div>
+        <button id="start-btn" onclick="startGame()">Ayo Main</button>
+    </div>
+
+    <!-- Game container (for quiz) -->
+    <div class="game-container" id="quiz-container" style="display: none;">
+        <div class="title">Kuis Islam</div>
+        <button id="start-btn-quiz" onclick="startQuiz()">Mulai Kuis</button>
+
+        <!-- Pertanyaan dan pilihan yang akan muncul setelah tombol ditekan -->
+        <div id="question" class="question" style="display: none;"></div>
+        <div id="options" style="display: none;"></div>
+        <div id="feedback" class="feedback" style="display: none;"></div>
+        <div id="explanation" class="feedback" style="display: none;"></div>
+    </div>
+
+    <!-- End Screen for the quiz -->
+    <div id="end-screen" style="display: none;">
+        <div class="title" id="final-score"></div>
+        <div class="feedback" id="thank-you-message" style="font-size: 24px; color: #333; margin-bottom: 30px;">
+            Terima kasih telah mengikuti kuis!
+        </div>
+        <button id="retry-btn" onclick="retryQuiz()">Main Lagi</button>
+        <button id="home-btn" onclick="goHome()">Kembali ke Halaman Utama</button>
+    </div>
+
+    <script>
+        const questions = [
+            { question: "ADA BERAPAKAH RUKUN IMAN?", options: [5, 6, 7, 4], answer: 6, explanation: "Rukun iman terdiri dari enam pokok ajaran." },
+            { question: "APA IBADAH YANG WAJIB DI BULAN RAMADHAN?", options: ["Zakat", "Puasa", "Sholat", "Haji"], answer: "Puasa", explanation: "Puasa adalah ibadah yang dilakukan di bulan Ramadhan." },
+            { question: "SIAPA NABI TERAKHIR?", options: ["Nabi Musa", "Nabi Isa", "Nabi Muhammad", "Nabi Ibrahim"], answer: "Nabi Muhammad", explanation: "Nabi Muhammad adalah nabi terakhir dalam Islam." },
+            { question: "APA KITAB SUCI DALAM ISLAM?", options: ["Injil", "Taurat", "Al-Qur'an", "Zabur"], answer: "Al-Qur'an", explanation: "Al-Qur'an adalah kitab suci umat Islam." },
+            { question: "APA RUKUN ISLAM YANG PERTAMA?", options: ["Sholat", "Zakat", "Syahadat", "Haji"], answer: "Syahadat", explanation: "Syahadat adalah pernyataan iman dalam Islam." },
+            { question: "SIAPA NABI YANG MEMBELAH LAUTAN?", options: ["Nabi Sulaiman", "Nabi Nuh", "Nabi Ibrahim", "Nabi Musa"], answer: "Nabi Musa", explanation: "Nabi Musa adalah nabi yang diberikan mukzijat oleh allah SWT. untuk membelah laut." },
+            { question: "PADA BULAN APA AL-QUR'AN DI TURUNKAN?", options: ["Ramadhan", "Muharram", "Safar", "Rajab"], answer: "Ramadhan", explanation: "Al-Qur'an diturunkan pada bulan Ramadhan." },
+            { question: "APA YANG MENJADI POKOK AJARAN ISLAM?", options: ["Rukun Iman", "Rukun Islam", "Al-Qur'an", "Hadist"], answer: "Rukun Islam", explanation: "Rukun Islam adalah lima pokok ajaran dalam Islam." },
+            { question: "DIMANA TEMPAT AGAMA ISLAM BERIBADAH?", options: ["Masjid", "Gereja", "Kuil", "Sinagoga"], answer: "Masjid", explanation: "Masjid adalah tempat ibadah umat Islam." },
+            { question: "APA YANG DIWAJIBKAN SETELAH MELAKUKAN HAJI?", options: ["Zakat", "Umrah", "Sholat", "Haji", "Syukur"], answer: "Zakat", explanation: "Zakat adalah kewajiban bagi yang mampu setelah haji." }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        // Fungsi untuk memulai permainan
+        function startGame() {
+            document.querySelector('.main-container').style.display = 'none'; // Menyembunyikan halaman utama
+            document.getElementById('quiz-container').style.display = 'block'; // Menampilkan kuis
+        }
+
+        // Fungsi untuk memulai kuis
+        function startQuiz() {
+            loadQuestion(); // Memuat pertanyaan pertama
+            document.getElementById('question').style.display = 'block'; // Menampilkan pertanyaan
+            document.getElementById('options').style.display = 'block'; // Menampilkan pilihan
+            document.getElementById('start-btn-quiz').style.display = 'none'; // Menyembunyikan tombol mulai
+        }
+
+        // Fungsi untuk memuat pertanyaan
+        function loadQuestion() {
+            const questionElement = document.getElementById('question');
+            const optionsElement = document.getElementById('options');
+            const currentQuestion = questions[currentQuestionIndex];
+
+            questionElement.textContent = currentQuestion.question;
+            optionsElement.innerHTML = ''; // Mengosongkan pilihan sebelumnya
+
+            // Menampilkan pilihan jawaban
+            currentQuestion.options.forEach(option => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.textContent = option;
+                div.onclick = () => checkAnswer(option); // Menambahkan event klik untuk memeriksa jawaban
+                optionsElement.appendChild(div);
+            });
+        }
+
+        // Fungsi untuk memeriksa jawaban
+        function checkAnswer(selected) {
+            const currentQuestion = questions[currentQuestionIndex];
+            const feedback = document.getElementById('feedback');
+            const explanation = document.getElementById('explanation');
+
+            if (selected === currentQuestion.answer) {
+                feedback.textContent = " Benar!";
+                feedback.style.color = "green";
+                score++; // Menambah skor jika jawaban benar
+            } else {
+                feedback.textContent = "Salah!";
+                feedback.style.color = "red";
+            }
+
+            explanation.textContent = currentQuestion.explanation;
+
+            // Menampilkan feedback dan penjelasan
+            feedback.style.display = 'block';
+            explanation.style.display = 'block';
+
+            // Melanjutkan ke pertanyaan berikutnya setelah 2 detik
+            setTimeout(() => {
+                currentQuestionIndex++;
+
+                if (currentQuestionIndex < questions.length) {
+                    loadQuestion(); // Memuat pertanyaan berikutnya
+                    feedback.style.display = 'none'; // Menyembunyikan feedback
+                    explanation.style.display = 'none'; // Menyembunyikan penjelasan
+                } else {
+                    showEndScreen(); // Menampilkan layar akhir setelah selesai
+                }
+            }, 2000);
+        }
+
+        // Fungsi untuk menampilkan layar akhir setelah kuis selesai
+        function showEndScreen() {
+            document.getElementById('end-screen').style.display = 'block'; // Menampilkan layar akhir
+            document.getElementById('final-score').textContent = `Skor Anda: ${score} dari ${questions.length}`; // Menampilkan skor akhir
+            document.getElementById('quiz-container').style.display = 'none'; // Menyembunyikan kuis
+        }
+
+        // Fungsi untuk memulai ulang kuis
+        function retryQuiz() {
+            score = 0; // Mengatur skor ulang
+            currentQuestionIndex = 0; // Mengatur ulang indeks pertanyaan
+            document.getElementById('end-screen').style.display = 'none'; // Menyembunyikan layar akhir
+            document.querySelector('.main-container').style.display = 'none'; // Menyembunyikan halaman utama
+            document.getElementById('quiz-container').style.display = 'block'; // Menampilkan kuis lagi
+            loadQuestion(); // Memuat pertanyaan pertama
+        }
+
+        // Fungsi untuk kembali ke halaman utama
+        function goHome() {
+            document.querySelector('.main-container').style.display = 'block'; // Menampilkan halaman utama
+            document.getElementById('end-screen').style.display = 'none'; // Menyembunyikan layar akhir
+        }
+    </script>
+</body>
+</html>
